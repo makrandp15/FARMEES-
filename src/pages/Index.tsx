@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import CropRecommendationForm from "@/components/CropRecommendationForm";
 import CropRecommendations from "@/components/CropRecommendations";
-import { Sprout, Users, Globe, Smartphone } from "lucide-react";
+import LanguageSelection from "@/components/LanguageSelection";
+import { Sprout, Users, Globe, Smartphone, Droplets, Thermometer } from "lucide-react";
 import heroImage from "@/assets/hero-farm.jpg";
 
 interface FormData {
@@ -23,9 +24,12 @@ interface Crop {
   difficulty: "Easy" | "Medium" | "Hard";
   description: string;
   tips: string[];
+  fertilizer?: string;
+  warnings?: string[];
 }
 
 const Index = () => {
+  const [showLanguageSelect, setShowLanguageSelect] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showRecommendations, setShowRecommendations] = useState(false);
   const [recommendations, setRecommendations] = useState<Crop[]>([]);
@@ -42,13 +46,15 @@ const Index = () => {
         waterRequirement: "High",
         profitability: "High",
         difficulty: "Medium",
-        description: "Well-suited for your soil type and rainfall conditions. Basmati rice has good market demand and export potential.",
+        description: "🌾 Great for your soil! Basmati rice sells well in market.",
         tips: [
-          "Plant during monsoon season (June-July)",
-          "Ensure proper drainage to prevent waterlogging",
-          "Apply organic fertilizers for better grain quality",
-          "Monitor for common pests like stem borer"
-        ]
+          "🌧️ Plant in June-July",
+          "💧 Good drainage needed",
+          "🌿 Use organic fertilizer", 
+          "🐛 Watch for pests"
+        ],
+        fertilizer: "NPK 10:26:26 at planting, Urea after 20 days",
+        warnings: ["⚠️ Heavy rain can cause flooding", "🌡️ Very hot weather reduces yield"]
       },
       {
         name: "Wheat",
@@ -56,13 +62,15 @@ const Index = () => {
         waterRequirement: "Medium",
         profitability: "Medium",
         difficulty: "Easy",
-        description: "Excellent winter crop for your region. Requires less water compared to rice and has stable market prices.",
+        description: "🌾 Easy winter crop. Good for beginners. Stable prices.",
         tips: [
-          "Sow in November-December",
-          "Use certified seeds for better yield",
-          "Apply fertilizers in split doses",
-          "Harvest when grain moisture is 20-25%"
-        ]
+          "❄️ Sow in November-December",
+          "🌱 Use good quality seeds",
+          "💊 Apply fertilizer in parts",
+          "📏 Harvest when ready"
+        ],
+        fertilizer: "DAP at sowing, Urea in 2 splits after 21 & 45 days",
+        warnings: ["⚠️ Late sowing reduces yield", "🐛 Watch for rust disease"]
       },
       {
         name: "Sugarcane",
@@ -70,13 +78,15 @@ const Index = () => {
         waterRequirement: "High",
         profitability: "High",
         difficulty: "Hard",
-        description: "Long-duration crop with high profitability. Suitable for your soil pH and temperature range.",
+        description: "🎯 Long crop but very profitable. Needs care but worth it.",
         tips: [
-          "Choose disease-resistant varieties",
-          "Maintain proper spacing between rows",
-          "Regular irrigation every 7-10 days",
-          "Harvest at 12-18 months depending on variety"
-        ]
+          "🛡️ Choose disease-free variety",
+          "📏 Keep proper spacing",
+          "💧 Water every 7-10 days",
+          "⏱️ Harvest at 12-18 months"
+        ],
+        fertilizer: "NPK 12:32:16 + Micronutrients at planting",
+        warnings: ["⚠️ Needs lots of water", "🌡️ Cold weather can damage crop", "💰 High initial investment needed"]
       }
     ];
 
@@ -98,7 +108,22 @@ const Index = () => {
   const handleBackToHome = () => {
     setShowForm(false);
     setShowRecommendations(false);
+    setShowLanguageSelect(false);
   };
+
+  const handleLanguageSelect = (selectedLanguage: string) => {
+    setLanguage(selectedLanguage);
+    setShowLanguageSelect(false);
+    setShowForm(true);
+  };
+
+  const handleGetStarted = () => {
+    setShowLanguageSelect(true);
+  };
+
+  if (showLanguageSelect) {
+    return <LanguageSelection onLanguageSelect={handleLanguageSelect} />;
+  }
 
   if (showRecommendations) {
     return (
@@ -143,18 +168,24 @@ const Index = () => {
         <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
           <Sprout className="w-16 h-16 mx-auto mb-6" />
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            Smart Crop Recommendations for Farmers
+            🌾 Grow Better Crops
           </h1>
           <p className="text-xl md:text-2xl mb-8 leading-relaxed opacity-90">
-            Get personalized crop suggestions based on your soil health, weather conditions, and location
+            Simple farming advice in your language
           </p>
-          <Button 
-            onClick={() => setShowForm(true)}
-            size="lg"
-            className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-4"
-          >
-            Get Started
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Button 
+              onClick={handleGetStarted}
+              size="lg"
+              className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-4 font-bold"
+            >
+              🚀 Start Now
+            </Button>
+            <div className="flex items-center text-white/80 text-sm">
+              <Smartphone className="w-4 h-4 mr-2" />
+              Works on mobile
+            </div>
+          </div>
         </div>
       </section>
 
@@ -162,47 +193,47 @@ const Index = () => {
       <section className="py-20 px-4 bg-secondary/30">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12">
-            Why Choose Our Platform?
+            ✨ Why Farmers Love Us
           </h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Sprout className="w-8 h-8 text-primary" />
+              <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">🌱</span>
               </div>
-              <h3 className="font-semibold text-lg mb-2 text-foreground">Smart Recommendations</h3>
-              <p className="text-muted-foreground">
-                AI-powered crop suggestions based on scientific data and local conditions
+              <h3 className="font-semibold text-xl mb-2 text-foreground">Smart Advice</h3>
+              <p className="text-muted-foreground text-lg">
+                Best crops for your soil & weather
               </p>
             </div>
             
             <div className="text-center">
-              <div className="bg-accent/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Globe className="w-8 h-8 text-accent" />
+              <div className="bg-accent/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">🗣️</span>
               </div>
-              <h3 className="font-semibold text-lg mb-2 text-foreground">Local Language Support</h3>
-              <p className="text-muted-foreground">
-                Get advice in your preferred regional language for better understanding
+              <h3 className="font-semibold text-xl mb-2 text-foreground">Your Language</h3>
+              <p className="text-muted-foreground text-lg">
+                Tips in Hindi, Tamil & more
               </p>
             </div>
             
             <div className="text-center">
-              <div className="bg-earth/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-earth" />
+              <div className="bg-earth/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">👨‍🌾</span>
               </div>
-              <h3 className="font-semibold text-lg mb-2 text-foreground">Farmer-Friendly</h3>
-              <p className="text-muted-foreground">
-                Simple interface designed specifically for farmers' needs and workflows
+              <h3 className="font-semibold text-xl mb-2 text-foreground">Easy to Use</h3>
+              <p className="text-muted-foreground text-lg">
+                Simple steps, big results
               </p>
             </div>
             
             <div className="text-center">
-              <div className="bg-leaf/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Smartphone className="w-8 h-8 text-leaf" />
+              <div className="bg-leaf/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">📱</span>
               </div>
-              <h3 className="font-semibold text-lg mb-2 text-foreground">Mobile Optimized</h3>
-              <p className="text-muted-foreground">
-                Works perfectly on any device, especially designed for mobile phones
+              <h3 className="font-semibold text-xl mb-2 text-foreground">Mobile Ready</h3>
+              <p className="text-muted-foreground text-lg">
+                Works on any phone
               </p>
             </div>
           </div>
@@ -213,48 +244,57 @@ const Index = () => {
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
-            How It Works
+            🚀 3 Simple Steps
           </h2>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="space-y-4">
-              <div className="bg-primary text-primary-foreground w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto">
+            <div className="space-y-6">
+              <div className="bg-gradient-to-br from-primary to-primary/70 text-primary-foreground w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto shadow-lg">
                 1
               </div>
-              <h3 className="font-semibold text-lg text-foreground">Enter Farm Details</h3>
-              <p className="text-muted-foreground">
-                Provide information about your location, soil type, rainfall, and temperature
-              </p>
+              <div className="text-center">
+                <span className="text-4xl mb-2 block">📍</span>
+                <h3 className="font-semibold text-xl text-foreground mb-2">Tell Us About Your Farm</h3>
+                <p className="text-muted-foreground text-lg">
+                  Location, soil & weather
+                </p>
+              </div>
             </div>
             
-            <div className="space-y-4">
-              <div className="bg-accent text-accent-foreground w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto">
+            <div className="space-y-6">
+              <div className="bg-gradient-to-br from-accent to-accent/70 text-accent-foreground w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto shadow-lg">
                 2
               </div>
-              <h3 className="font-semibold text-lg text-foreground">Get Recommendations</h3>
-              <p className="text-muted-foreground">
-                Our system analyzes your data and provides suitable crop suggestions
-              </p>
+              <div className="text-center">
+                <span className="text-4xl mb-2 block">🤖</span>
+                <h3 className="font-semibold text-xl text-foreground mb-2">Get Smart Tips</h3>
+                <p className="text-muted-foreground text-lg">
+                  Best crops for you
+                </p>
+              </div>
             </div>
             
-            <div className="space-y-4">
-              <div className="bg-leaf text-leaf-foreground w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto">
+            <div className="space-y-6">
+              <div className="bg-gradient-to-br from-leaf to-leaf/70 text-leaf-foreground w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto shadow-lg">
                 3
               </div>
-              <h3 className="font-semibold text-lg text-foreground">Start Farming</h3>
-              <p className="text-muted-foreground">
-                Follow the detailed growing tips and maximize your harvest
-              </p>
+              <div className="text-center">
+                <span className="text-4xl mb-2 block">💰</span>
+                <h3 className="font-semibold text-xl text-foreground mb-2">Grow & Profit</h3>
+                <p className="text-muted-foreground text-lg">
+                  Follow tips, earn more
+                </p>
+              </div>
             </div>
           </div>
           
           <div className="mt-12">
             <Button 
-              onClick={() => setShowForm(true)}
+              onClick={handleGetStarted}
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4"
+              className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white px-12 py-4 text-xl font-bold rounded-full shadow-lg"
             >
-              Try It Now
+              🌾 Start Farming Better
             </Button>
           </div>
         </div>
