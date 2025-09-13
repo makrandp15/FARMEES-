@@ -107,6 +107,7 @@ const Index = () => {
           recommendations={recommendations}
           language={language}
           onBack={handleBackToForm}
+          onBackToHome={handleBackToHome}
         />
       </div>
     );

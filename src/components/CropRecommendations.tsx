@@ -17,9 +17,10 @@ interface CropRecommendationsProps {
   recommendations: Crop[];
   language: string;
   onBack: () => void;
+  onBackToHome: () => void;
 }
 
-const CropRecommendations = ({ recommendations, language, onBack }: CropRecommendationsProps) => {
+const CropRecommendations = ({ recommendations, language, onBack, onBackToHome }: CropRecommendationsProps) => {
   const getProfitabilityColor = (level: string) => {
     switch (level) {
       case "High":
@@ -68,9 +69,14 @@ const CropRecommendations = ({ recommendations, language, onBack }: CropRecommen
             Based on your location and soil conditions
           </p>
         </div>
-        <Button variant="outline" onClick={onBack}>
-          Back to Form
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={onBackToHome}>
+            ← Home
+          </Button>
+          <Button variant="outline" onClick={onBack}>
+            ← Back to Form
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-6">
