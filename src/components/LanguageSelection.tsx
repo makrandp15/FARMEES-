@@ -10,20 +10,17 @@ const LanguageSelection = ({ onLanguageSelect }: LanguageSelectionProps) => {
   const languages = [
     { code: "english", name: "English", native: "English" },
     { code: "hindi", name: "Hindi", native: "हिंदी" },
-    { code: "tamil", name: "Tamil", native: "தமிழ்" },
-    { code: "bengali", name: "Bengali", native: "বাংলা" },
-    { code: "marathi", name: "Marathi", native: "मराठी" },
-    { code: "telugu", name: "Telugu", native: "తెలుగు" },
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center px-4">
       <Card className="w-full max-w-md p-8 shadow-xl">
         <div className="text-center mb-8">
-          <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Languages className="w-8 h-8 text-primary" />
+          <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span className="text-4xl">🌾</span>
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">Choose Your Language</h1>
+          <h1 className="text-3xl font-bold text-primary mb-2">FARMEES</h1>
+          <h2 className="text-xl font-semibold text-foreground mb-2">Choose Your Language</h2>
           <p className="text-muted-foreground">भाषा चुनें • Choose Language</p>
         </div>
 

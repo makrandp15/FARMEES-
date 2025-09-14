@@ -4,7 +4,6 @@ import CropRecommendationForm from "@/components/CropRecommendationForm";
 import CropRecommendations from "@/components/CropRecommendations";
 import LanguageSelection from "@/components/LanguageSelection";
 import Chatbot from "@/components/Chatbot";
-import LanguageToggle from "@/components/LanguageToggle";
 import { Sprout, Users, Globe, Smartphone, Droplets, Thermometer } from "lucide-react";
 import heroImage from "@/assets/hero-farm.jpg";
 
@@ -133,29 +132,49 @@ const Index = () => {
 
   if (showRecommendations) {
     return (
-      <div className="min-h-screen bg-background py-8 px-4">
-        <CropRecommendations 
-          recommendations={recommendations}
-          language={language}
-          onBack={handleBackToForm}
-          onBackToHome={handleBackToHome}
-        />
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <header className="bg-primary text-primary-foreground py-4 px-6 shadow-lg">
+          <div className="flex items-center justify-center">
+            <span className="text-2xl mr-3">🌾</span>
+            <h1 className="text-2xl font-bold">FARMEES</h1>
+          </div>
+        </header>
+        <div className="py-8 px-4">
+          <CropRecommendations 
+            recommendations={recommendations}
+            language={language}
+            onBack={handleBackToForm}
+            onBackToHome={handleBackToHome}
+          />
+        </div>
+        <Chatbot language={language} onLanguageChange={handleLanguageToggle} />
       </div>
     );
   }
 
   if (showForm) {
     return (
-      <div className="min-h-screen bg-background py-8 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <Button variant="outline" onClick={handleBackToHome} className="mb-4">
-              ← Back to Home
-            </Button>
-            <h1 className="text-4xl font-bold text-foreground mb-4">Crop Recommendation System</h1>
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <header className="bg-primary text-primary-foreground py-4 px-6 shadow-lg">
+          <div className="flex items-center justify-center">
+            <span className="text-2xl mr-3">🌾</span>
+            <h1 className="text-2xl font-bold">FARMEES</h1>
           </div>
-          <CropRecommendationForm onSubmit={handleFormSubmit} language={language} />
+        </header>
+        <div className="py-8 px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <Button variant="outline" onClick={handleBackToHome} className="mb-4">
+                ← Back to Home
+              </Button>
+              <h1 className="text-4xl font-bold text-foreground mb-4">Crop Recommendation System</h1>
+            </div>
+            <CropRecommendationForm onSubmit={handleFormSubmit} language={language} />
+          </div>
         </div>
+        <Chatbot language={language} onLanguageChange={handleLanguageToggle} />
       </div>
     );
   }
@@ -172,10 +191,13 @@ const Index = () => {
         </div>
         
         <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-          <Sprout className="w-16 h-16 mx-auto mb-6" />
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+          <div className="mb-6">
+            <span className="text-6xl">🌾</span>
+            <h1 className="text-3xl md:text-4xl font-bold mt-4 mb-2">FARMEES</h1>
+          </div>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
             🌾 Grow Better Crops
-          </h1>
+          </h2>
           <p className="text-xl md:text-2xl mb-8 leading-relaxed opacity-90">
             Simple farming advice in your language
           </p>
@@ -306,9 +328,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Language Toggle & Chatbot */}
-      <LanguageToggle language={language} onLanguageChange={handleLanguageToggle} />
-      <Chatbot language={language} />
+      {/* Chatbot */}
+      <Chatbot language={language} onLanguageChange={handleLanguageToggle} />
     </div>
   );
 };

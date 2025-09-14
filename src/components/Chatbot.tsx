@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { MessageCircle, Mic, Send, X } from "lucide-react";
+import { MessageCircle, Mic, Send, X, Globe } from "lucide-react";
 
 interface Message {
   id: number;
@@ -14,9 +14,10 @@ interface Message {
 
 interface ChatbotProps {
   language: string;
+  onLanguageChange: (language: string) => void;
 }
 
-const Chatbot = ({ language }: ChatbotProps) => {
+const Chatbot = ({ language, onLanguageChange }: ChatbotProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -114,12 +115,23 @@ const Chatbot = ({ language }: ChatbotProps) => {
       {/* Chat Modal */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-md h-[500px] flex flex-col p-0">
-          <DialogHeader className="p-4 border-b bg-gradient-to-r from-primary to-accent text-white">
+          <DialogHeader className="p-4 border-b bg-gradient-to-r from-primary to-leaf text-white">
             <DialogTitle className="flex items-center justify-between">
               <span>{t.title}</span>
-              <Button variant="ghost" size="sm" onClick={() => setIsOpen(false)} className="text-white hover:bg-white/20">
-                <X className="w-4 h-4" />
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => onLanguageChange(language === 'english' ? 'hindi' : 'english')}
+                  className="text-white hover:bg-white/20"
+                >
+                  <Globe className="w-4 h-4 mr-1" />
+                  {language === 'english' ? 'हिंदी' : 'English'}
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => setIsOpen(false)} className="text-white hover:bg-white/20">
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
             </DialogTitle>
           </DialogHeader>
 
