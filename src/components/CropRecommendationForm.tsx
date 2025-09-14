@@ -19,9 +19,10 @@ interface FormData {
 
 interface CropRecommendationFormProps {
   onSubmit: (data: FormData) => void;
+  language: string;
 }
 
-const CropRecommendationForm = ({ onSubmit }: CropRecommendationFormProps) => {
+const CropRecommendationForm = ({ onSubmit, language }: CropRecommendationFormProps) => {
   const [formData, setFormData] = useState<FormData>({
     location: "",
     temperature: "",
@@ -41,27 +42,105 @@ const CropRecommendationForm = ({ onSubmit }: CropRecommendationFormProps) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const autoDetectLocation = () => {
+    // Simulate location detection with dummy data
+    setFormData(prev => ({
+      ...prev,
+      location: "Delhi",
+      temperature: "28",
+      rainfall: "850", 
+      soilType: "loamy",
+      soilPh: "6.8"
+    }));
+  };
+
+  const translations = {
+    english: {
+      title: "Farm Details",
+      subtitle: "Quick info about your farm",
+      location: "📍 Your Location",
+      locationPlaceholder: "City or District", 
+      language: "🗣️ Language",
+      temperature: "🌡️ Temperature (°C)",
+      rainfall: "🌧️ Yearly Rain (mm)",
+      soilType: "🏔️ Soil Type",
+      soilTypePlaceholder: "Pick your soil type",
+      soilPh: "🧪 Soil pH (Acid/Base)",
+      soilPhHint: "💡 Normal range: 6.0-7.5",
+      farmSize: "🚜 Farm Size (acres)",
+      autoDetect: "📍 Enable Location (Demo)",
+      submit: "🚀 Get My Crop Advice",
+      soilTypes: {
+        clay: "🧱 Clay (Heavy)",
+        sandy: "🏖️ Sandy (Light)", 
+        loamy: "🌱 Loamy (Best)",
+        silt: "💧 Silt (Smooth)",
+        peaty: "🌿 Peaty (Dark)",
+        chalky: "⚪ Chalky (White)"
+      }
+    },
+    hindi: {
+      title: "खेत की जानकारी",
+      subtitle: "अपने खेत के बारे में बताएं",
+      location: "📍 आपका स्थान",
+      locationPlaceholder: "शहर या जिला",
+      language: "🗣️ भाषा", 
+      temperature: "🌡️ तापमान (°C)",
+      rainfall: "🌧️ वार्षिक बारिश (mm)",
+      soilType: "🏔️ मिट्टी का प्रकार",
+      soilTypePlaceholder: "अपनी मिट्टी चुनें",
+      soilPh: "🧪 मिट्टी का pH",
+      soilPhHint: "💡 सामान्य रेंज: 6.0-7.5",
+      farmSize: "🚜 खेत का आकार (एकड़)",
+      autoDetect: "📍 स्थान चालू करें (डेमो)",
+      submit: "🚀 फसल की सलाह पाएं",
+      soilTypes: {
+        clay: "🧱 चिकनी मिट्टी",
+        sandy: "🏖️ रेतीली मिट्टी",
+        loamy: "🌱 दोमट मिट्टी (सबसे अच्छी)",
+        silt: "💧 गाद मिट्टी", 
+        peaty: "🌿 पीट मिट्टी",
+        chalky: "⚪ चूना मिट्टी"
+      }
+    }
+  };
+
+  const t = translations[language as keyof typeof translations] || translations.english;
+
   return (
     <Card className="w-full max-w-2xl mx-auto p-6 bg-card shadow-lg">
       <div className="mb-6 text-center">
         <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
           <span className="text-2xl">🌾</span>
         </div>
-        <h2 className="text-2xl font-bold text-foreground mb-2">Farm Details</h2>
+        <h2 className="text-2xl font-bold text-foreground mb-2">{t.title}</h2>
         <p className="text-muted-foreground">
-          Quick info about your farm
+          {t.subtitle}
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Auto-detect button */}
+        <div className="text-center">
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={autoDetectLocation}
+            className="bg-gradient-to-r from-green-500/10 to-blue-500/10 border-green-300 hover:from-green-500/20 hover:to-blue-500/20"
+          >
+            {t.autoDetect}
+          </Button>
+          <p className="text-xs text-muted-foreground mt-1">Sample data will be filled</p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="location" className="flex items-center gap-2 text-lg">
-              📍 Your Location
+              {t.location}
             </Label>
             <Input
               id="location"
-              placeholder="City or District"
+              placeholder={t.locationPlaceholder}
               value={formData.location}
               onChange={(e) => handleInputChange("location", e.target.value)}
               required
@@ -70,15 +149,10 @@ const CropRecommendationForm = ({ onSubmit }: CropRecommendationFormProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label className="text-lg">🗣️ Language</Label>
+            <Label className="text-lg">{t.language}</Label>
             <div className="bg-muted/50 p-3 rounded-lg">
               <p className="text-sm text-muted-foreground">Selected: {
-                formData.language === 'english' ? 'English' :
-                formData.language === 'hindi' ? 'हिंदी' :
-                formData.language === 'tamil' ? 'தமிழ்' :
-                formData.language === 'bengali' ? 'বাংলা' :
-                formData.language === 'marathi' ? 'मराठी' :
-                formData.language === 'telugu' ? 'తెలుగు' : 'English'
+                language === 'english' ? 'English' : 'हिंदी'
               }</p>
             </div>
           </div>
@@ -87,7 +161,7 @@ const CropRecommendationForm = ({ onSubmit }: CropRecommendationFormProps) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="temperature" className="flex items-center gap-2 text-lg">
-              🌡️ Temperature (°C)
+              {t.temperature}
             </Label>
             <Input
               id="temperature"
@@ -102,7 +176,7 @@ const CropRecommendationForm = ({ onSubmit }: CropRecommendationFormProps) => {
 
           <div className="space-y-2">
             <Label htmlFor="rainfall" className="flex items-center gap-2 text-lg">
-              🌧️ Yearly Rain (mm)
+              {t.rainfall}
             </Label>
             <Input
               id="rainfall"
@@ -118,25 +192,25 @@ const CropRecommendationForm = ({ onSubmit }: CropRecommendationFormProps) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="soilType" className="text-lg">🏔️ Soil Type</Label>
+            <Label htmlFor="soilType" className="text-lg">{t.soilType}</Label>
             <Select value={formData.soilType} onValueChange={(value) => handleInputChange("soilType", value)}>
               <SelectTrigger className="h-12 text-lg">
-                <SelectValue placeholder="Pick your soil type" />
+                <SelectValue placeholder={t.soilTypePlaceholder} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="clay">🧱 Clay (Heavy)</SelectItem>
-                <SelectItem value="sandy">🏖️ Sandy (Light)</SelectItem>
-                <SelectItem value="loamy">🌱 Loamy (Best)</SelectItem>
-                <SelectItem value="silt">💧 Silt (Smooth)</SelectItem>
-                <SelectItem value="peaty">🌿 Peaty (Dark)</SelectItem>
-                <SelectItem value="chalky">⚪ Chalky (White)</SelectItem>
+                <SelectItem value="clay">{t.soilTypes.clay}</SelectItem>
+                <SelectItem value="sandy">{t.soilTypes.sandy}</SelectItem>
+                <SelectItem value="loamy">{t.soilTypes.loamy}</SelectItem>
+                <SelectItem value="silt">{t.soilTypes.silt}</SelectItem>
+                <SelectItem value="peaty">{t.soilTypes.peaty}</SelectItem>
+                <SelectItem value="chalky">{t.soilTypes.chalky}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="soilPh" className="flex items-center gap-2 text-lg">
-              🧪 Soil pH (Acid/Base)
+              {t.soilPh}
             </Label>
             <Input
               id="soilPh"
@@ -148,12 +222,12 @@ const CropRecommendationForm = ({ onSubmit }: CropRecommendationFormProps) => {
               required
               className="h-12 text-lg"
             />
-            <p className="text-xs text-muted-foreground">💡 Normal range: 6.0-7.5</p>
+            <p className="text-xs text-muted-foreground">{t.soilPhHint}</p>
           </div>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="farmSize" className="text-lg">🚜 Farm Size (acres)</Label>
+          <Label htmlFor="farmSize" className="text-lg">{t.farmSize}</Label>
           <Input
             id="farmSize"
             type="number"
@@ -166,7 +240,7 @@ const CropRecommendationForm = ({ onSubmit }: CropRecommendationFormProps) => {
         </div>
 
         <Button type="submit" className="w-full h-14 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white text-lg font-bold rounded-lg">
-          🚀 Get My Crop Advice
+          {t.submit}
         </Button>
       </form>
     </Card>

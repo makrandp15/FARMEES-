@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import CropRecommendationForm from "@/components/CropRecommendationForm";
 import CropRecommendations from "@/components/CropRecommendations";
 import LanguageSelection from "@/components/LanguageSelection";
+import Chatbot from "@/components/Chatbot";
+import LanguageToggle from "@/components/LanguageToggle";
 import { Sprout, Users, Globe, Smartphone, Droplets, Thermometer } from "lucide-react";
 import heroImage from "@/assets/hero-farm.jpg";
 
@@ -117,6 +119,10 @@ const Index = () => {
     setShowForm(true);
   };
 
+  const handleLanguageToggle = (newLanguage: string) => {
+    setLanguage(newLanguage);
+  };
+
   const handleGetStarted = () => {
     setShowLanguageSelect(true);
   };
@@ -148,7 +154,7 @@ const Index = () => {
             </Button>
             <h1 className="text-4xl font-bold text-foreground mb-4">Crop Recommendation System</h1>
           </div>
-          <CropRecommendationForm onSubmit={handleFormSubmit} />
+          <CropRecommendationForm onSubmit={handleFormSubmit} language={language} />
         </div>
       </div>
     );
@@ -299,6 +305,10 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Language Toggle & Chatbot */}
+      <LanguageToggle language={language} onLanguageChange={handleLanguageToggle} />
+      <Chatbot language={language} />
     </div>
   );
 };
