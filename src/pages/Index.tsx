@@ -37,57 +37,91 @@ const Index = () => {
   const [language, setLanguage] = useState("english");
 
   const generateRecommendations = (formData: FormData): Crop[] => {
-    setLanguage(formData.language);
+    // Language is already managed globally, don't override it from formData
     
-    // Mock recommendations based on input
+    // Mock recommendations based on input - use current language state
+    const isHindi = language === 'hindi';
     const mockRecommendations: Crop[] = [
       {
-        name: "Rice (Basmati)",
-        season: "Kharif",
+        name: isHindi ? "चावल (बासमती)" : "Rice (Basmati)",
+        season: isHindi ? "खरीफ" : "Kharif",
         waterRequirement: "High",
         profitability: "High",
         difficulty: "Medium",
-        description: "🌾 Great for your soil! Basmati rice sells well in market.",
-        tips: [
+        description: isHindi 
+          ? "🌾 आपकी मिट्टी के लिए बेहतरीन! बासमती चावल की बाजार में अच्छी कीमत मिलती है।"
+          : "🌾 Great for your soil! Basmati rice sells well in market.",
+        tips: isHindi ? [
+          "🌧️ जून-जुलाई में बुआई करें",
+          "💧 अच्छी निकासी की जरूरत",
+          "🌿 जैविक खाद का उपयोग करें",
+          "🐛 कीड़ों से बचाव करें"
+        ] : [
           "🌧️ Plant in June-July",
           "💧 Good drainage needed",
           "🌿 Use organic fertilizer", 
           "🐛 Watch for pests"
         ],
-        fertilizer: "NPK 10:26:26 at planting, Urea after 20 days",
-        warnings: ["⚠️ Heavy rain can cause flooding", "🌡️ Very hot weather reduces yield"]
+        fertilizer: isHindi 
+          ? "बुआई के समय NPK 10:26:26, 20 दिन बाद यूरिया"
+          : "NPK 10:26:26 at planting, Urea after 20 days",
+        warnings: isHindi 
+          ? ["⚠️ भारी बारिश से बाढ़ हो सकती है", "🌡️ अधिक गर्मी से उत्पादन कम हो जाता है"]
+          : ["⚠️ Heavy rain can cause flooding", "🌡️ Very hot weather reduces yield"]
       },
       {
-        name: "Wheat",
-        season: "Rabi",
+        name: isHindi ? "गेहूं" : "Wheat",
+        season: isHindi ? "रबी" : "Rabi",
         waterRequirement: "Medium",
         profitability: "Medium",
         difficulty: "Easy",
-        description: "🌾 Easy winter crop. Good for beginners. Stable prices.",
-        tips: [
+        description: isHindi 
+          ? "🌾 आसान सर्दियों की फसल। नए किसानों के लिए बेहतरीन। स्थिर कीमतें।"
+          : "🌾 Easy winter crop. Good for beginners. Stable prices.",
+        tips: isHindi ? [
+          "❄️ नवंबर-दिसंबर में बुआई करें",
+          "🌱 अच्छे बीज का इस्तेमाल करें",
+          "💊 खाद को हिस्सों में डालें",
+          "📏 सही समय पर कटाई करें"
+        ] : [
           "❄️ Sow in November-December",
           "🌱 Use good quality seeds",
           "💊 Apply fertilizer in parts",
           "📏 Harvest when ready"
         ],
-        fertilizer: "DAP at sowing, Urea in 2 splits after 21 & 45 days",
-        warnings: ["⚠️ Late sowing reduces yield", "🐛 Watch for rust disease"]
+        fertilizer: isHindi 
+          ? "बुआई के समय DAP, 21 और 45 दिन बाद यूरिया"
+          : "DAP at sowing, Urea in 2 splits after 21 & 45 days",
+        warnings: isHindi 
+          ? ["⚠️ देरी से बुआई करने पर उत्पादन कम होता है", "🐛 रतुआ रोग से सावधान रहें"]
+          : ["⚠️ Late sowing reduces yield", "🐛 Watch for rust disease"]
       },
       {
-        name: "Sugarcane",
-        season: "Year-round",
+        name: isHindi ? "गन्ना" : "Sugarcane",
+        season: isHindi ? "साल भर" : "Year-round",
         waterRequirement: "High",
         profitability: "High",
         difficulty: "Hard",
-        description: "🎯 Long crop but very profitable. Needs care but worth it.",
-        tips: [
+        description: isHindi 
+          ? "🎯 लम्बी फसल लेकिन बहुत मुनाफा। देखभाल चाहिए लेकिन फायदेमंद है।"
+          : "🎯 Long crop but very profitable. Needs care but worth it.",
+        tips: isHindi ? [
+          "🛡️ रोग मुक्त किस्म चुनें",
+          "📏 उचित दूरी रखें",
+          "💧 7-10 दिन में पानी दें",
+          "⏱️ 12-18 महीने में कटाई करें"
+        ] : [
           "🛡️ Choose disease-free variety",
           "📏 Keep proper spacing",
           "💧 Water every 7-10 days",
           "⏱️ Harvest at 12-18 months"
         ],
-        fertilizer: "NPK 12:32:16 + Micronutrients at planting",
-        warnings: ["⚠️ Needs lots of water", "🌡️ Cold weather can damage crop", "💰 High initial investment needed"]
+        fertilizer: isHindi 
+          ? "बुआई के समय NPK 12:32:16 + सूक्ष्म पोषक तत्व"
+          : "NPK 12:32:16 + Micronutrients at planting",
+        warnings: isHindi 
+          ? ["⚠️ बहुत पानी की जरूरत होती है", "🌡️ ठंड में फसल को नुकसान हो सकता है", "💰 शुरुआत में ज्यादा पैसा लगता है"]
+          : ["⚠️ Needs lots of water", "🌡️ Cold weather can damage crop", "💰 High initial investment needed"]
       }
     ];
 
@@ -154,6 +188,19 @@ const Index = () => {
   }
 
   if (showForm) {
+    const formTranslations = {
+      english: {
+        backToHome: "← Back to Home",
+        title: "Crop Recommendation System"
+      },
+      hindi: {
+        backToHome: "← होम पर वापस जाएं",
+        title: "फसल सुझाव प्रणाली"  
+      }
+    };
+
+    const formT = formTranslations[language as keyof typeof formTranslations] || formTranslations.english;
+
     return (
       <div className="min-h-screen bg-background">
         {/* Header */}
@@ -167,9 +214,9 @@ const Index = () => {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
               <Button variant="outline" onClick={handleBackToHome} className="mb-4">
-                ← Back to Home
+                {formT.backToHome}
               </Button>
-              <h1 className="text-4xl font-bold text-foreground mb-4">Crop Recommendation System</h1>
+              <h1 className="text-4xl font-bold text-foreground mb-4">{formT.title}</h1>
             </div>
             <CropRecommendationForm onSubmit={handleFormSubmit} language={language} />
           </div>

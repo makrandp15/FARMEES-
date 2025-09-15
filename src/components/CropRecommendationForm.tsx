@@ -30,12 +30,12 @@ const CropRecommendationForm = ({ onSubmit, language }: CropRecommendationFormPr
     soilType: "",
     soilPh: "",
     farmSize: "",
-    language: "english"
+    language: language
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit({...formData, language});
   };
 
   const handleInputChange = (field: keyof FormData, value: string) => {
