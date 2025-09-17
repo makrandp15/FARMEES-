@@ -239,11 +239,11 @@ const Index = () => {
         
         <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
           <div className="mb-6">
-            <span className="text-6xl">🌻</span>
+            <span className="text-6xl">🌾</span>
             <h1 className="text-3xl md:text-4xl font-bold mt-4 mb-2">FARMEES</h1>
           </div>
           <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-             Grow Better Crops
+              Grow Better Crops
           </h2>
           <p className="text-xl md:text-2xl mb-8 leading-relaxed opacity-90">
             Simple farming advice in your language
