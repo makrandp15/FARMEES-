@@ -206,7 +206,7 @@ const Index = () => {
         {/* Header */}
         <header className="bg-primary text-primary-foreground py-4 px-6 shadow-lg">
           <div className="flex items-center justify-center">
-            <span className="text-2xl mr-3">🌾</span>
+            <span className="text-2xl mr-3">🌻</span>
             <h1 className="text-2xl font-bold">FARMEES</h1>
           </div>
         </header>
