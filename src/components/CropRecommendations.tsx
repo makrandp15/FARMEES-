@@ -6,13 +6,15 @@ import { Sprout, Droplets, Sun, TrendingUp, AlertCircle } from "lucide-react";
 interface Crop {
   name: string;
   season: string;
-  waterRequirement: "Low" | "Medium" | "High";
-  profitability: "Low" | "Medium" | "High";
-  difficulty: "Easy" | "Medium" | "Hard";
+  waterRequirement: string; // Now percentage like "25%"
+  profitability: string; // Now percentage like "70%"
+  difficulty: string; // Now percentage like "40%"
   description: string;
   tips: string[];
   fertilizer?: string;
   warnings?: string[];
+  soilWetnessDays: number;
+  growingDuration: string;
 }
 
 interface CropRecommendationsProps {
@@ -30,10 +32,11 @@ const CropRecommendations = ({ recommendations, language, onBack, onBackToHome }
       subtitle: "Best choices for your farm",
       home: "🏠 Home",
       changeDetails: "← Change Details",
-      season: "📅 Season:",
       profit: "Profit",
-      water: "Water:",
-      level: "Level:",
+      water: "Water Need",
+      difficulty: "Care Level",
+      soilWet: "Soil Wet",
+      duration: "Duration",
       warnings: "⚠️ Important Warnings",
       fertilizerGuide: "🌿 Fertilizer Guide",
       quickTips: "💡 Quick Tips",
@@ -45,10 +48,11 @@ const CropRecommendations = ({ recommendations, language, onBack, onBackToHome }
       subtitle: "आपके खेत के लिए सबसे अच्छे विकल्प",
       home: "🏠 होम",
       changeDetails: "← विवरण बदलें",
-      season: "📅 मौसम:",
       profit: "मुनाफा",
-      water: "पानी:",
-      level: "स्तर:",
+      water: "पानी की जरूरत",
+      difficulty: "देखभाल स्तर",
+      soilWet: "मिट्टी गीली",
+      duration: "अवधि",
       warnings: "⚠️ महत्वपूर्ण चेतावनी",
       fertilizerGuide: "🌿 खाद गाइड",
       quickTips: "💡 त्वरित सुझाव",
@@ -58,43 +62,11 @@ const CropRecommendations = ({ recommendations, language, onBack, onBackToHome }
   };
 
   const t = translations[language as keyof typeof translations] || translations.english;
-  const getProfitabilityColor = (level: string) => {
-    switch (level) {
-      case "High":
-        return "bg-leaf text-leaf-foreground";
-      case "Medium":
-        return "bg-earth text-earth-foreground";
-      case "Low":
-        return "bg-muted text-muted-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
-    }
-  };
-
-  const getWaterColor = (level: string) => {
-    switch (level) {
-      case "High":
-        return "text-sky";
-      case "Medium":
-        return "text-accent";
-      case "Low":
-        return "text-muted-foreground";
-      default:
-        return "text-muted-foreground";
-    }
-  };
-
-  const getDifficultyColor = (level: string) => {
-    switch (level) {
-      case "Easy":
-        return "bg-leaf/20 text-leaf-foreground";
-      case "Medium":
-        return "bg-earth/20 text-earth-foreground";
-      case "Hard":
-        return "bg-destructive/20 text-destructive-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
-    }
+  const getProfitabilityColor = (percentage: string) => {
+    const value = parseInt(percentage);
+    if (value >= 70) return "bg-leaf text-leaf-foreground";
+    if (value >= 40) return "bg-earth text-earth-foreground";
+    return "bg-muted text-muted-foreground";
   };
 
   return (
@@ -128,36 +100,33 @@ const CropRecommendations = ({ recommendations, language, onBack, onBackToHome }
                   <span className="text-2xl">🌾</span>
                   {crop.name}
                 </h2>
-                <p className="text-muted-foreground text-lg">{t.season} {crop.season}</p>
+                <p className="text-muted-foreground text-lg">{crop.season}</p>
               </div>
               <Badge 
-                variant={crop.profitability === "High" ? "default" : crop.profitability === "Medium" ? "secondary" : "outline"}
                 className={`${getProfitabilityColor(crop.profitability)} font-bold text-lg px-4 py-2`}
               >
-                💰 {t.profit} ({crop.profitability === "High" ? (language === 'hindi' ? 'उच्च' : 'High') : 
-                         crop.profitability === "Medium" ? (language === 'hindi' ? 'मध्यम' : 'Medium') : 
-                         (language === 'hindi' ? 'कम' : 'Low')})
+                💰 {t.profit}: {crop.profitability}
               </Badge>
             </div>
 
             <p className="text-foreground mb-6 leading-relaxed text-lg">{crop.description}</p>
 
-            <div className="grid md:grid-cols-3 gap-4 mb-6 p-4 bg-muted/30 rounded-lg">
+            <div className="grid md:grid-cols-4 gap-4 mb-6 p-4 bg-muted/30 rounded-lg">
               <div className="flex items-center gap-2">
                 <span className="text-xl">💧</span>
-                <span className="text-foreground font-medium">{t.water} {crop.waterRequirement === "High" ? (language === 'hindi' ? 'अधिक' : 'High') : 
-                         crop.waterRequirement === "Medium" ? (language === 'hindi' ? 'मध्यम' : 'Medium') : 
-                         (language === 'hindi' ? 'कम' : 'Low')}</span>
+                <span className="text-foreground font-medium">{t.water}: {crop.waterRequirement}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xl">⚡</span>
-                <span className="text-foreground font-medium">{t.level} {crop.difficulty === "Easy" ? (language === 'hindi' ? 'आसान' : 'Easy') : 
-                         crop.difficulty === "Medium" ? (language === 'hindi' ? 'मध्यम' : 'Medium') : 
-                         (language === 'hindi' ? 'कठिन' : 'Hard')}</span>
+                <span className="text-foreground font-medium">{t.difficulty}: {crop.difficulty}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xl">📅</span>
-                <span className="text-foreground font-medium">{crop.season}</span>
+                <span className="text-xl">🏞️</span>
+                <span className="text-foreground font-medium">{t.soilWet}: {crop.soilWetnessDays} {language === 'hindi' ? 'दिन' : 'days'}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl">⏱️</span>
+                <span className="text-foreground font-medium">{t.duration}: {crop.growingDuration}</span>
               </div>
             </div>
 

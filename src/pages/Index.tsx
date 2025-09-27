@@ -20,13 +20,15 @@ interface FormData {
 interface Crop {
   name: string;
   season: string;
-  waterRequirement: "Low" | "Medium" | "High";
-  profitability: "Low" | "Medium" | "High";
-  difficulty: "Easy" | "Medium" | "Hard";
+  waterRequirement: string; // Now percentage like "25%"
+  profitability: string; // Now percentage like "70%"
+  difficulty: string; // Now percentage like "40%"
   description: string;
   tips: string[];
   fertilizer?: string;
   warnings?: string[];
+  soilWetnessDays: number;
+  growingDuration: string;
 }
 
 const Index = () => {
@@ -45,9 +47,9 @@ const Index = () => {
       {
         name: isHindi ? "चावल (बासमती)" : "Rice (Basmati)",
         season: isHindi ? "खरीफ" : "Kharif",
-        waterRequirement: "High",
-        profitability: "High",
-        difficulty: "Medium",
+        waterRequirement: "80%",
+        profitability: "85%",
+        difficulty: "45%",
         description: isHindi 
           ? "🌾 आपकी मिट्टी के लिए बेहतरीन! बासमती चावल की बाजार में अच्छी कीमत मिलती है।"
           : "🌾 Great for your soil! Basmati rice sells well in market.",
@@ -67,7 +69,9 @@ const Index = () => {
           : "NPK 10:26:26 at planting, Urea after 20 days",
         warnings: isHindi 
           ? ["⚠️ भारी बारिश से बाढ़ हो सकती है", "🌡️ अधिक गर्मी से उत्पादन कम हो जाता है"]
-          : ["⚠️ Heavy rain can cause flooding", "🌡️ Very hot weather reduces yield"]
+          : ["⚠️ Heavy rain can cause flooding", "🌡️ Very hot weather reduces yield"],
+        soilWetnessDays: 25,
+        growingDuration: isHindi ? "3-4 महीने" : "3-4 months"
       },
       {
         name: isHindi ? "गेहूं" : "Wheat",
@@ -94,14 +98,16 @@ const Index = () => {
           : "DAP at sowing, Urea in 2 splits after 21 & 45 days",
         warnings: isHindi 
           ? ["⚠️ देरी से बुआई करने पर उत्पादन कम होता है", "🐛 रतुआ रोग से सावधान रहें"]
-          : ["⚠️ Late sowing reduces yield", "🐛 Watch for rust disease"]
+          : ["⚠️ Late sowing reduces yield", "🐛 Watch for rust disease"],
+        soilWetnessDays: 15,
+        growingDuration: isHindi ? "4-5 महीने" : "4-5 months"
       },
       {
         name: isHindi ? "गन्ना" : "Sugarcane",
         season: isHindi ? "साल भर" : "Year-round",
-        waterRequirement: "High",
-        profitability: "High",
-        difficulty: "Hard",
+        waterRequirement: "85%",
+        profitability: "90%",
+        difficulty: "70%",
         description: isHindi 
           ? "🎯 लम्बी फसल लेकिन बहुत मुनाफा। देखभाल चाहिए लेकिन फायदेमंद है।"
           : "🎯 Long crop but very profitable. Needs care but worth it.",
@@ -121,7 +127,9 @@ const Index = () => {
           : "NPK 12:32:16 + Micronutrients at planting",
         warnings: isHindi 
           ? ["⚠️ बहुत पानी की जरूरत होती है", "🌡️ ठंड में फसल को नुकसान हो सकता है", "💰 शुरुआत में ज्यादा पैसा लगता है"]
-          : ["⚠️ Needs lots of water", "🌡️ Cold weather can damage crop", "💰 High initial investment needed"]
+          : ["⚠️ Needs lots of water", "🌡️ Cold weather can damage crop", "💰 High initial investment needed"],
+        soilWetnessDays: 30,
+        growingDuration: isHindi ? "12-18 महीने" : "12-18 months"
       }
     ];
 
