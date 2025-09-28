@@ -76,9 +76,9 @@ const Index = () => {
       {
         name: isHindi ? "गेहूं" : "Wheat",
         season: isHindi ? "रबी" : "Rabi",
-        waterRequirement: "Medium",
-        profitability: "Medium",
-        difficulty: "Easy",
+        waterRequirement: "60%",
+        profitability: "65%",
+        difficulty: "30%",
         description: isHindi 
           ? "🌾 आसान सर्दियों की फसल। नए किसानों के लिए बेहतरीन। स्थिर कीमतें।"
           : "🌾 Easy winter crop. Good for beginners. Stable prices.",
